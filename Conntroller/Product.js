@@ -94,7 +94,7 @@ const GetUserProducts = async (req, res) => {
     console.log(decodedToken.userId)
 
     // Assuming your user model has a field to store product references, like 'images'
-    const Product = await Post.find({ 'user._id': decodedToken.userId })
+    const Product = await Post.find({ 'user._id' : decodedToken.userId })
     console.log(Product,"Product")
     if (!Product) {
       return res.status(404).json({ status: false, message: 'Product not found' });
@@ -144,7 +144,7 @@ const FindbyId = async (req, res) => {
       return;
     }
 
-    const baseUrl = "http://localhost:5000/uploads/"; // Replace with your actual base URL
+    const baseUrl = "http://terakarachi.com/uploads/"; // Replace with your actual base URL
     const imagesWithBaseUrl = result.images.map((image) => baseUrl + image);
 
     // Update the result with the new image URLs
@@ -216,7 +216,7 @@ const GetAllProducts = async (req, res) => {
 
     const posts = await Post.find();
 
-    const baseUrl = "http://localhost:5000/uploads/"; // Replace with your actual base URL
+    const baseUrl = "http://terakarachi.com/uploads/"; // Replace with your actual base URL
     const postsWithBaseUrl = posts.map((data) => {
       data.images = data.images.map((image) => baseUrl + image);
       return data;

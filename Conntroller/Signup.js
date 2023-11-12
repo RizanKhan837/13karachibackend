@@ -84,7 +84,7 @@ const signup = async (req, res) => {
   
       const posts = await User.find();
   
-      const baseUrl = "http://localhost:5000/uploads/"; // Replace with your actual base URL
+      const baseUrl = "http://terakarachi.com/uploads/"; // Replace with your actual base URL
       const postsWithBaseUrl = posts.map((data) => {
         data.images = data.images.map((image) => baseUrl + image);
         return data;

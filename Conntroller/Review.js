@@ -115,7 +115,7 @@ reviewController.getReviewsByProductId = async (req, res) => {
     const { ProductId } = req.params;
     // const approvedReviews = await Review.find({ ProductId, isApproved: true });
     const approvedReviews = await Review.find({ ProductId });
-    const baseUrl = "http://localhost:5000/uploads/"; // Replace with your actual base URL
+    const baseUrl = "http://terakarachi.com/uploads/"; // Replace with your actual base URL
     const imagesWithBaseUrl = approvedReviews?.images?.map(
       (image) => baseUrl + image
     );
