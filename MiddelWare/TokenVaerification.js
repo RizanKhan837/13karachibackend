@@ -50,6 +50,46 @@ const verifySubadminToken = (req, res, next) => {
   }
 };
 
+const verifySupandadminToken = (req, res, next) => {
+  const authToken = req.headers.authorization;
+
+  if (!authToken) {
+    return res.status(401).json({ message: "Authorization token not found" });
+  }
+
+  try {
+    const token = authToken.split("Bearer ")[1];
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, process.env.SUBADMIN_SECRET_KEY);
+      if (decoded.role === "subadmin") {
+        req.user = decoded;
+        return next();
+      }
+    } catch (superAdminError) {
+      // If verification with SUPER_ADMIN_SECRET_KEY fails, try with ADMIN_SECRET_KEY
+      try {
+        decoded = jwt.verify(token, process.env.ADMIN_SECRET_KEY);
+        if (decoded.role === "admin") {
+          req.user = decoded;
+          return next();
+        }
+      } catch (adminError) {
+        // Neither SUPER_ADMIN_SECRET_KEY nor ADMIN_SECRET_KEY matched
+        return res.status(401).json({ message: "Invalid authorization token" });
+      }
+    }
+
+    // Handle any other roles or cases here
+    return res.status(401).json({ message: "Invalid authorization token" });
+  } catch (error) {
+    return res
+      .status(401)
+      .json({ message: "Invalid authorization token", error: error.message });
+  }
+};
+
 
 const verifyUserToken = (req, res, next) => {
   const authToken = req.headers.authorization;
@@ -81,6 +121,7 @@ const verifyUserToken = (req, res, next) => {
 module.exports = 
  { verifySubadminToken,
   verifyAdminToken,
-  verifyUserToken
+  verifyUserToken,
+  verifySupandadminToken
 }
 

@@ -11,6 +11,10 @@ const postSchema = new mongoose.Schema({
       ref: "Category",
     },
   ],
+  user: {
+    type: Object,
+    ref: "users",
+  },
 
   
   // subcategories: [

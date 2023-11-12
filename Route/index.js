@@ -18,6 +18,7 @@ const {
   updateProduct,
   findPostsByCategory,
   fndPostsByCategory,
+  GetUserProducts,
 } = require("../Conntroller/Product");
 const {
   placeOrder,
@@ -32,6 +33,7 @@ const {
   verifyAdminToken,
   verifySubadminToken,
   verifyUserToken,
+  verifySupandadminToken,
 } = require("../MiddelWare/TokenVaerification");
 const { upload2 } = require("../MiddelWare/Multer");
 // const {uploadvideo} = require("../MiddelWare/VideosMulter")
@@ -66,7 +68,7 @@ const { GetMarket, AddMarket, deleteMarket, updateMarkets } = require("../Conntr
 router.post("/signup",upload2,signup);
 router.put("/updateUserStatus/:id",upload.none(),updateUserStatus);
 router.post("/login" ,upload.none(), login);
-router.post("/addProduct", upload2, AddProduct);
+router.post("/addProduct", upload2,verifySupandadminToken, AddProduct);
 
 router.put('/posts/:postId',upload.none(), ApprovePost);
 // router.post('/GetAllApprovedPostAdmin',verifyAdminToken, GetAllApprovedPostAdmin);
@@ -85,6 +87,7 @@ router.get("/getsubCategories", upload2, GetsubCategories);
 router.get("/getMarket", GetMarket);
 router.get("/FindbyId/:name", FindbyId);
 router.get("/findPostsByCategory/:name", upload2, findPostsByCategory);
+router.get("/getUserProducts",verifySubadminToken, GetUserProducts);
 router.get("/getAllReview/:ProductId", reviewController.getReviewsByProductId);
 
 router.post("/addCategory", upload2, AddCategory);

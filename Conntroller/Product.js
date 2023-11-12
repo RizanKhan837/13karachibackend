@@ -1,4 +1,5 @@
 const Post = require("../Model/ProductSchema");
+const User = require("../Model/Signup");
 const { upload } = require("../MiddelWare/Multer");
 const Category = require("../Model/CategorySchema");
 const Brand = require("../Model/BrandSchema");
@@ -17,6 +18,7 @@ function getRandomNumber(min, max) {
 // Subadmin add post route
 const AddProduct = async (req, res) => {
   try {
+    const decodedToken = req.user;
     const {
       name,
       category,
@@ -43,6 +45,8 @@ const AddProduct = async (req, res) => {
 
     const foundItems = [...foundCategories, ...foundSubcategories];
     console.log(foundItems, "foundItems");
+    const user = await User.findById(decodedToken.userId);
+
 
     // Separate foundCategories and foundSubcategories if needed
     const cat = foundCategories.map((e) => e);
@@ -53,6 +57,7 @@ const AddProduct = async (req, res) => {
     const imageFileNames = req.files?.map((file) => file?.filename);
 
     const post = new Post({
+      user: user,
       name,
       category: foundItems,
       // subcategories: sub,
@@ -80,6 +85,28 @@ const AddProduct = async (req, res) => {
       .json({ message: "Failed to add post", error: error.message });
   }
 };
+
+
+
+const GetUserProducts = async (req, res) => {
+  try {
+    const decodedToken = req.user;
+    console.log(decodedToken.userId)
+
+    // Assuming your user model has a field to store product references, like 'images'
+    const Product = await Post.find({ 'user._id': decodedToken.userId })
+    console.log(Product,"Product")
+    if (!Product) {
+      return res.status(404).json({ status: false, message: 'Product not found' });
+    }
+
+    res.status(200).json({ status: true, data: Product });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: 'Failed to fetch user products', error: error.message });
+  }
+};
+
 
 const Findbylink = async (req, res) => {
   try {
@@ -365,5 +392,6 @@ module.exports = {
   FindbyId,
   updateProduct,
   findPostsByCategory,
-  fndPostsByCategory
+  fndPostsByCategory,
+  GetUserProducts
 };
