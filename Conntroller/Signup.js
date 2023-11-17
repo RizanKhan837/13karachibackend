@@ -4,15 +4,15 @@ const User = require("../Model/Signup");
 const { sendResponse } = require("../helper/helper");
 const signup = async (req, res) => {
     try {
-      const { number, email,name, password, address,businessname,role,area,market } = req.body;
+      const { number, email,name, password, address,businessname,role,area,market,sellerType } = req.body;
       const imageFileNames = req.files?.map((file) => file?.filename);
       console.log(number, email,name, password, address,businessname,role,area,market )
       const existedarea = await Area.findById(area);
       const existingMarket = await Market.findById(market);
-      if(!existedarea){
+      if(!existedarea && sellerType === "proper"){
         res.status(401).send(sendResponse(false, null, "Area Not Found"));
       }
-      if(!existingMarket){
+      if(!existingMarket  && sellerType === "proper"){
         res.status(401).send(sendResponse(false, null, "Market Not Found"));
       }
 
@@ -28,6 +28,7 @@ const signup = async (req, res) => {
         password,
         businessname,
         role,
+        sellerType,
         images: imageFileNames,
       });
   

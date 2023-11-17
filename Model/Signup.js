@@ -40,6 +40,9 @@ marketDetails: {
   password: {
     type: String,
   },
+  sellerType: {
+    type: String,
+  },
   role: {
     type: String,
     enum: ['admin', 'subadmin', 'user'],
@@ -50,6 +53,7 @@ status: {
   enum: ['pending', 'approved', 'rejected'],
   default: 'pending',
 },
+
   images: [
     {
       type: String,
