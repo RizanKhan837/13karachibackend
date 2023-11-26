@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const SubcategorySchema = new mongoose.Schema({
   categories: [
     {
-      type: String,
+      type: Object,
       required: [true, "categories are Required"],
     },
   ],

@@ -53,6 +53,9 @@ const postSchema = new mongoose.Schema({
       quantity: {
         type: Number,
       },
+      color: {
+        type: String,
+      },
     },
   ],
   images: [
