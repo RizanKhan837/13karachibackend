@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User  = require("../Model/Signup")
+const bcrypt = require('bcrypt');
 
 const generateAdminToken = (userId) => {
     // console.log("generating admin token")
@@ -27,9 +28,15 @@ const generateAdminToken = (userId) => {
       const user = await User.findOne({ email });
   
       // Check if the user exists and the password is correct
-      if (!user || !user.comparePassword(password)) {
-        return res.status(401).json({ message: 'Invalid username or password' });
+      if (!user ) {
+        return res.status(401).json({ message: 'User not found' });
       }
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
   
       // Generate a separate token based on the user's role
       let token;

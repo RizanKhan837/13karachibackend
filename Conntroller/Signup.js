@@ -2,9 +2,12 @@ const Area = require("../Model/AreaSchema");
 const Market = require("../Model/MarketSchema");
 const User = require("../Model/Signup");
 const { sendResponse } = require("../helper/helper");
+const bcrypt = require('bcrypt');
+
 const signup = async (req, res) => {
     try {
       const { number, email,name, password, address,businessname,role,area,market,sellerType } = req.body;
+      const hashedPassword = await bcrypt.hash(password, 10);
       const imageFileNames = req.files?.map((file) => file?.filename);
       console.log(email,"email")
       const existedarea = await Area.findById(area);
@@ -33,7 +36,7 @@ const signup = async (req, res) => {
         marketDetails:existingMarket,
         number,
         address,
-        password,
+        password:hashedPassword,
         businessname,
         role,
         sellerType,
